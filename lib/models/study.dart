@@ -129,44 +129,50 @@ class Day {
     );
   }
 
-  Widget form() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text.rich(
-          TextSpan(
-            text: "$label: ",
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-            children: [
-              TextSpan(
-                text: prompt,
-                style: const TextStyle(fontWeight: FontWeight.normal),
-              ),
-            ],
-          ),
-        ),
-        const Divider(),
-        if (passage != null)
-          ElevatedButton(
-            onPressed: () async {
-              if (!await launchUrl(Uri.parse(
-                  "https://www.biblegateway.com/passage/?search=${passage}"))) {
-                throw Exception('Could not launch $passage');
-              }
-            },
-            child: const Text("Read Day's Passage"),
-          ),
-        const SizedBox(height: 16.0),
-        ...questions
-            .map((question) => Column(children: [
-                  question.form(),
-                  const SizedBox(height: 30),
-                ]))
-            .toList(),
-        const SizedBox(height: 50),
-      ],
-    );
+  Widget form(BuildContext context) {
+    return Center(
+        child: SizedBox(
+            width: MediaQuery.of(context).size.width > 700
+                ? 700
+                : MediaQuery.of(context).size.width,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text.rich(
+                  TextSpan(
+                    text: "$label: ",
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 18),
+                    children: [
+                      TextSpan(
+                        text: prompt,
+                        style: const TextStyle(fontWeight: FontWeight.normal),
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(),
+                if (passage != null)
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (!await launchUrl(Uri.parse(
+                          "https://www.biblegateway.com/passage/?search=${passage}"))) {
+                        throw Exception('Could not launch $passage');
+                      }
+                    },
+                    child: const Text("Read Day's Passage"),
+                  ),
+                const SizedBox(height: 16.0),
+                ...questions
+                    .map((question) => Column(children: [
+                          question.form(),
+                          const SizedBox(height: 30),
+                        ]))
+                    .toList(),
+                const SizedBox(height: 50),
+              ],
+            )));
   }
 }
 

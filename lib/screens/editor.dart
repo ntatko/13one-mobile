@@ -21,6 +21,7 @@ class EditorScreenState extends State<EditorScreen> {
           padding: const EdgeInsets.only(left: 8, right: 8),
           children: [
             Wrap(
+              alignment: WrapAlignment.spaceBetween,
               children: [
                 Text(
                   widget.lesson.title,
@@ -32,7 +33,7 @@ class EditorScreenState extends State<EditorScreen> {
               ],
             ),
             const SizedBox(height: 20),
-            ...widget.lesson.days.map((e) => e.form()).toList(),
+            ...widget.lesson.days.map((e) => e.form(context)).toList(),
           ]),
     );
   }
