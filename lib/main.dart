@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:thirteenone_mobile/models/answers.dart';
@@ -7,8 +8,12 @@ import 'package:path_provider/path_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final appDocumentDirectory = await getApplicationDocumentsDirectory();
-  Hive.init(appDocumentDirectory.path);
+  String path = "/assets/db";
+  if (!kIsWeb) {
+    var appDocDir = await getApplicationDocumentsDirectory();
+    path = appDocDir.path;
+  }
+  Hive.init(path);
   await Answer.openBox();
 
   Study current = await Study.getCurrentStudy();
