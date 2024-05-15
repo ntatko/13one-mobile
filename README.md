@@ -2,6 +2,12 @@
 
 A mobile version of the [13one](https://13one.org) website.
 
+## Download the app
+
+You can find the iOS and MacOS versions on the apple app store [here](https://apps.apple.com/us/app/13one/id6502590737) and for android on the google play store [here](https://play.google.com/store/apps/details?id=com.thirteenone.mobile).
+
+If you would like to run this app on windows, linux, or any other platform, you can build the app from the source code. You can find instructions on how to build the app on the internet. If you have any questions, feel free to submit an issue, and I'll do my best to help you.
+
 ## Getting Started
 
 ### Prerequisites
