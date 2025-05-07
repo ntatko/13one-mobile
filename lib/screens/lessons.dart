@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:thirteenone_mobile/models/study.dart';
+import 'package:thirteenone_mobile/models/user.dart';
 import 'package:thirteenone_mobile/screens/editor.dart';
 
 class LessonsScreen extends StatefulWidget {
@@ -24,6 +25,12 @@ class LessonsScreenState extends State<LessonsScreen> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Lessons'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () => User().showSettingsDialog(context),
+            ),
+          ],
         ),
         drawer: Drawer(
             child: FutureBuilder<List<Study>>(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:thirteenone_mobile/models/answers.dart';
 import 'package:thirteenone_mobile/models/study.dart';
+import 'package:thirteenone_mobile/models/user.dart';
 import 'package:thirteenone_mobile/screens/lessons.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -15,6 +16,7 @@ void main() async {
   }
   Hive.init(path);
   await Answer.openBox();
+  await User.init();
 
   Study current = await Study.getCurrentStudy();
 

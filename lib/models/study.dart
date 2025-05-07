@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:thirteenone_mobile/models/answers.dart';
+import 'package:thirteenone_mobile/models/user.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 const String baseUrl = 'https://homiletics-directus.cloud.plodamouse.com/items';
@@ -130,7 +131,7 @@ class Day {
   }
 
   Widget form(BuildContext context) {
-    return Center(
+    return User().withSettings((context, user) => Center(
         child: SizedBox(
             width: MediaQuery.of(context).size.width > 700
                 ? 700
@@ -142,12 +143,15 @@ class Day {
                 Text.rich(
                   TextSpan(
                     text: "$label: ",
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 18),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: user.preferredFontSize + 2),
                     children: [
                       TextSpan(
                         text: prompt,
-                        style: const TextStyle(fontWeight: FontWeight.normal),
+                        style: TextStyle(
+                            fontWeight: FontWeight.normal,
+                            fontSize: user.preferredFontSize),
                       ),
                     ],
                   ),
@@ -157,7 +161,7 @@ class Day {
                   ElevatedButton(
                     onPressed: () async {
                       if (!await launchUrl(Uri.parse(
-                          "https://www.biblegateway.com/passage/?search=${passage}"))) {
+                          "https://www.biblegateway.com/passage/?search=${passage}&version=${user.defaultBibleTranslation}"))) {
                         throw Exception('Could not launch $passage');
                       }
                     },
@@ -172,7 +176,7 @@ class Day {
                     .toList(),
                 const SizedBox(height: 50),
               ],
-            )));
+            ))));
   }
 }
 
@@ -181,63 +185,77 @@ class Question {
   String number;
   String text;
   String? passage;
+  bool isNotAnswerable;
 
   Question({
     required this.id,
     required this.number,
     required this.text,
     this.passage,
+    this.isNotAnswerable = false,
   });
 
   factory Question.fromJson(Map<String, dynamic> json) {
+    bool isNotAnswerable = json['is_not_answerable'];
+    print("isNotAnswerable $isNotAnswerable");
+
     return Question(
       id: json['id'],
       number: json['number'],
       text: json['text'],
       passage: json['passage'],
+      isNotAnswerable: json['is_not_answerable'],
     );
   }
 
   Widget form() {
-    Answer answer = Answer(questionId: id);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text.rich(
-          TextSpan(
-            text: "$number: ",
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            children: [
-              TextSpan(
-                text: text,
-                style: const TextStyle(fontWeight: FontWeight.normal),
-              ),
-            ],
+    return User().withSettings((context, user) {
+      Answer answer = Answer(questionId: id);
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text.rich(
+            TextSpan(
+              text: "$number: ",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: user.preferredFontSize + 2),
+              children: [
+                TextSpan(
+                  text: text,
+                  style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontSize: user.preferredFontSize),
+                ),
+              ],
+            ),
           ),
-        ),
-        if (passage != null)
-          TextButton(
-              onPressed: () async {
-                if (!await launchUrl(Uri.parse(
-                    "https://www.biblegateway.com/passage/?search=${passage}"))) {
-                  throw Exception('Could not launch $passage');
-                }
+          if (passage != null)
+            TextButton(
+                onPressed: () async {
+                  if (!await launchUrl(Uri.parse(
+                      "https://www.biblegateway.com/passage/?search=${passage}&version=${user.defaultBibleTranslation}"))) {
+                    throw Exception('Could not launch $passage');
+                  }
+                },
+                child: const Text("Read Supplemental Passage(s)")),
+          if (!isNotAnswerable) const SizedBox(height: 15),
+          if (!isNotAnswerable)
+            TextFormField(
+              initialValue: answer.answer,
+              minLines: 3,
+              maxLines: 10,
+              onChanged: (value) {
+                answer.answer = value;
               },
-              child: const Text("Read Supplemental Passage(s)")),
-        const SizedBox(height: 15),
-        TextFormField(
-          initialValue: answer.answer,
-          minLines: 3,
-          maxLines: 10,
-          onChanged: (value) {
-            answer.answer = value;
-          },
-          decoration: InputDecoration(
-              border: const OutlineInputBorder(),
-              labelText: 'Answer Question $number'),
-        ),
-      ],
-    );
+              style: TextStyle(fontSize: user.preferredFontSize),
+              decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: 'Answer Question $number'),
+            ),
+        ],
+      );
+    });
   }
 }
