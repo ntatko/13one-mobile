@@ -40,7 +40,7 @@ class EditorScreenState extends State<EditorScreen> {
               ],
             ),
             const SizedBox(height: 20),
-            ...widget.lesson.days.map((e) => e.form(context)).toList(),
+            ...widget.lesson.days.map((e) => e.form(context)),
           ]),
     );
   }
