@@ -1,0 +1,2 @@
+/Users/ntatko/Documents/programming/bsf/thirteenone_mobile/android/app/.cxx/RelWithDebInfo/a8583r45/armeabi-v7a/CMakeFiles/rebuild_cache.dir
+/Users/ntatko/Documents/programming/bsf/thirteenone_mobile/android/app/.cxx/RelWithDebInfo/a8583r45/armeabi-v7a/CMakeFiles/edit_cache.dir

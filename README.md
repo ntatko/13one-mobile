@@ -35,12 +35,16 @@ To run the project, run `flutter run` in the project directory. This will start 
 The Google Play Console accepts Android App Bundles, which are files that include all of your app's compiled code and resources, but defer APK generation and signing to Google Play. To build an Android App Bundle, run `flutter build appbundle` in the project directory. This will generate an `.aab` file in the `build/app/outputs/bundle/release` directory.
 
 ```bash
-flutter build appbundle --release
+flutter build appbundle --build-number 2 --build-name 1.0.0
 ```
 
 ### Build for iOS
 
 You will need xcode to make an archive the app. This is done in the `project` section of xcode.
+
+### Build for MacOS
+
+To build for MacOS, run `flutter build macos` in the project directory. This will generate a `.app` file in the `build/macos/Build/Products/Release` directory. Then, you can go to xcode and archive the runner
 
 ## Contributing
 

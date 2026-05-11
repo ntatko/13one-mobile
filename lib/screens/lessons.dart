@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:thirteenone_mobile/models/study.dart';
+import 'package:thirteenone_mobile/models/user.dart';
 import 'package:thirteenone_mobile/screens/editor.dart';
 
 class LessonsScreen extends StatefulWidget {
@@ -12,22 +13,30 @@ class LessonsScreen extends StatefulWidget {
 
 class LessonsScreenState extends State<LessonsScreen> {
   int _selectedStudyId = 1;
+  String _selectedStudyTitle = '';
 
   @override
   void initState() {
     super.initState();
     _selectedStudyId = widget.currentStudy.id;
+    _selectedStudyTitle = widget.currentStudy.name;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Lessons'),
+          title: Text(_selectedStudyTitle),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () => User().showSettingsDialog(context),
+            ),
+          ],
         ),
         drawer: Drawer(
-            child: FutureBuilder<List<Study>>(
-          future: Study.getStudies(),
+            child: FutureBuilder<List<StudyOverview>>(
+          future: Study.getStudyCatalog(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return ListView(
@@ -39,6 +48,7 @@ class LessonsScreenState extends State<LessonsScreen> {
                           onTap: () {
                             setState(() {
                               _selectedStudyId = study.id;
+                              _selectedStudyTitle = study.name;
                             });
                             Navigator.pop(context);
                           },

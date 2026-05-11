@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:thirteenone_mobile/models/study.dart';
+import 'package:thirteenone_mobile/models/user.dart';
 
 class EditorScreen extends StatefulWidget {
   final Lesson lesson;
@@ -16,6 +17,12 @@ class EditorScreenState extends State<EditorScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.lesson.passage),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () => User().showSettingsDialog(context),
+          ),
+        ],
       ),
       body: ListView(
           padding: const EdgeInsets.only(left: 8, right: 8),
@@ -33,7 +40,7 @@ class EditorScreenState extends State<EditorScreen> {
               ],
             ),
             const SizedBox(height: 20),
-            ...widget.lesson.days.map((e) => e.form(context)).toList(),
+            ...widget.lesson.days.map((e) => e.form(context)),
           ]),
     );
   }
